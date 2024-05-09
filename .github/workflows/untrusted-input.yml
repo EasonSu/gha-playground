@@ -13,11 +13,11 @@ jobs:
     name: Build extension bundle
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - shell: bash
         run: |
           echo "CI_BRANCH=${{ github.head_ref }}" >> $GITHUB_ENV
-          echo "CI_BRANCH_BASE=${{ github.base_ref }}" >> $GITHUB_ENV
-          echo "CI_COMMIT_SHA=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
 
       - shell: bash
         run: |
