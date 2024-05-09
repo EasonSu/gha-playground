@@ -1,0 +1,28 @@
+name: Test untrusted input
+run-name: PR head `${{ github.head_ref }}`
+
+on:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  BuildExtensionBundle:
+    name: Build extension bundle
+    runs-on: ubuntu-latest
+    steps:
+      - shell: bash
+        run: |
+          echo "CI_BRANCH=${{ github.head_ref }}" >> $GITHUB_ENV
+          echo "CI_BRANCH_BASE=${{ github.base_ref }}" >> $GITHUB_ENV
+          echo "CI_COMMIT_SHA=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
+
+      - shell: bash
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          echo "test 123" > ./README.md
+          git add ./README.md
+          git commit -q -m "Update README from ${{ github.head_ref }} branch."
